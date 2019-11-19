@@ -25,13 +25,19 @@ function cvsHandler(req, response) {
     }
     //Convert and store csv information into a buffer. 
     dataset1 = data.toString();
-    console.log("data", dataset1)
+    // console.log("data", typeof dataset1)
+    // dataset = dataset1[0].split(' ')
+    // console.log("DATASET", typeof dataset)
 
     //Store information for each individual keyword in an array index. Split it by every newline in the csv file. 
+    dataset1Raw = dataset1.split('\n');
+    console.log("datesetRAW", dataset1Raw)
+
     const convertData = [];
-    const headers = dataset1[0].split(',');
+    const headers = dataset1[0].split(' ');
+    console.log("headers", typeof headers[0])
     for( var i = 1; i < dataset1.length; i++) {
-      var data = dataset1[i].split(',');
+      var data = dataset1[i].split(' ');
       var blankSlate = {};
       for ( var j = 0; j < dataset1.length; j++) {
         blankSlate[headers[j].trim()] = data[j].trim();
@@ -39,7 +45,7 @@ function cvsHandler(req, response) {
       convertData.push(blankSlate)
     }
     JSON.stringify(convertData)
-    console.log(convertData)
+    console.log("CONVERTDATA", convertData)
     response.send(convertData)
   })
 }
