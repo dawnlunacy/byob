@@ -35,7 +35,7 @@ function cvsHandler(req, response) {
 
     const convertData = [];
     const headers = dataset1[0].split(' ');
-    console.log("headers", typeof headers[0])
+    console.log("headers", headers[0])
     for( var i = 1; i < dataset1.length; i++) {
       var data = dataset1[i].split(' ');
       var blankSlate = {};
