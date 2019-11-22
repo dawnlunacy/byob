@@ -4,6 +4,7 @@ exports.up = function(knex) {
     {
       table.increments('id').primary();
       table.string('id_artist');
+      table.unique('id_artist');
       table.string('artist_name');
       table.string('album_genre');
       table.string('website');
@@ -26,7 +27,7 @@ exports.up = function(knex) {
         table.timestamps(true, true);
 
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex) {
