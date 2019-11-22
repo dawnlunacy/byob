@@ -2,7 +2,7 @@ module.exports = {
 
   development: {
     client: 'pg',
-    connection: 'postgress://localhost/publications',
+    connection: 'postgress://localhost/music',
     useNullAsDefault: true,
     migrations: {
       directory: './db/migrations',
