@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 var fs = require('fs');
+const cors = require('cors');
 var dataset1
 
 app.set('port', process.env.PORT || 3000);
@@ -14,3 +15,5 @@ app.get('/', (request, response) => {
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on http://localhost:${app.get('port')}.`);
 });
+
+app.use(cors());
