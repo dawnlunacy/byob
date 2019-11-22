@@ -4,11 +4,11 @@ var fs = require('fs');
 var dataset1
 
 app.set('port', process.env.PORT || 3000);
-app.locals.title = 'Turing/s SEO Ranking Factors'
+app.locals.title = 'Music'
 
 
 app.get('/', (request, response) => {
-  response.send('Ready to figure out keywords to target?')
+  response.send('View artist and their albums')
 })
 
 app.listen(app.get('port'), () => {
