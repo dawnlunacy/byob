@@ -2,16 +2,27 @@
   "name": "byob",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.20.2",
     "pg": "^7.14.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "knex": "^0.20.2",
+    "pg": "^7.12.1"
   }
 }

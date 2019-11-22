@@ -1,14 +1,13 @@
 module.exports = {
-
   development: {
     client: 'pg',
     connection: 'postgress://localhost/music',
-    useNullAsDefault: true,
     migrations: {
       directory: './db/migrations',
     },
-    seed: {
+    seeds: {
       directory: './db/seeds/dev'
-    }
+    },
+    useNullAsDefault: true,
   }
 };
