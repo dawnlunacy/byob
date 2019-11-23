@@ -69,22 +69,22 @@ const albumsData = require('../../../albumsData');
 
 const createArtist = (knex, artist) => {
   return knex('artists').insert({
-    idArtist: artist.idArtist,
-    artistName: artist.artistName,
-    artistGenre: artist.artistGenre,
-    website: artist.artistGenre,
+    id_artist: artist.idArtist,
+    artist_name: artist.artistName,
+    artist_genre: artist.artistGenre,
+    website: artist.website,
     biography: artist.biography
-  }, 'idArtist')
+  }, 'id_artist')
   .then(idArtist => {
     let albumsPromise = [];
-    albumsData.filter(album => album.idArtist === idArtist[0])
+    albumsData.filter(album => album[idArtist] === idArtist[0])
       .forEach(album => {
       let albumInfo = {
-        idArtist: album.idArtist,
-        albumName: album.albumName,
-        yearReleased: album.yearReleased,
-        albumArtist: album.albumArtist,
-        albumGenre: album.albumGenre
+        id_artist: album.idArtist,
+        album_name: album.albumName,
+        year_released: album.yearReleased,
+        album_artist: album.albumArtist,
+        album_genre: album.albumGenre
       }
       albumsPromise.push(albumInfo)
     })
