@@ -77,7 +77,7 @@ const createArtist = (knex, artist) => {
   }, 'id_artist')
   .then(idArtist => {
     let albumsPromise = [];
-    albumsData.filter(album => album[idArtist] === idArtist[0])
+    albumsData.filter(album => album.idArtist === idArtist[0])
       .forEach(album => {
       let albumInfo = {
         id_artist: album.idArtist,
@@ -86,7 +86,7 @@ const createArtist = (knex, artist) => {
         album_artist: album.albumArtist,
         album_genre: album.albumGenre
       }
-      albumsPromise.push(albumInfo)
+      albumsPromise.push(createAlbum(knex, albumInfo))
     })
     return Promise.all(albumsPromise)
   });
