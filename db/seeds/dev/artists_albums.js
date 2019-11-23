@@ -23,60 +23,91 @@
 // 6. Resolve all of the product's promises
 
 
-const artistsData = require('../../../artistsData');
-const albumsData = require('../../../albumsData');
-
-exports.seed = function(knex, Promise) {
-  return knex('artists').del()
-  .then(() => {
-    return knex('albums').del();
-  })
-  .then(() => {
-    return knex('artists').insert(artistsData);
-  })
-  .then(() => {
-    let albumPromises = [];
-    albumsData.forEach((albumCollection) => {
-      albumCollection.forEach((album) => {
-        let artist = album.albumArtist;
-        albumPromises.push(createAlbum(knex, album, artist))
-      })
-    });
-    
-    return Promise.all(albumPromises);
-  });
-};
-
-const createAlbum = (knex, album, artist) => {
-  console.log("album", album)
-  console.log("artist", artist)
-  return knex('artists').where('artistName', artist).first()
-  .then((artistAlbums) => {
-    return knex('albumsData').insert({
-      idArtist: album.idArtist,
-      albumName: album.albumName,
-      yearReleased: album.yearReleased,
-      albumArtist: album.albumArtist,
-      albumGenre: album.albumGenre,
-      artist_id: artistAlbums.idArtist
-    });
-  });
-};
-
-
 // const artistsData = require('../../../artistsData');
 // const albumsData = require('../../../albumsData');
 
-// const createArtist = (knex, artist) => {
-//   return knex('artists').insert({
-//     idArtist: artist.idArtist,
-//     artistName: artist.artistName,
-//     artistGenre: artist.artistGenre,
-//     website: artist.artistGenre,
-//     biography: artist.biography
-//   }, 'id')
-//   .then(artistId => {
-    
-
+// exports.seed = function(knex, Promise) {
+//   return knex('artists').del()
+//   .then(() => {
+//     return knex('albums').del();
 //   })
-// }
+//   .then(() => {
+//     return knex('artists').insert(artistsData);
+//   })
+//   .then(() => {
+//     let albumPromises = [];
+//     albumsData.forEach((albumCollection) => {
+//       albumCollection.forEach((album) => {
+//         let artist = album.albumArtist;
+//         albumPromises.push(createAlbum(knex, album, artist))
+//       })
+//     });
+    
+//     return Promise.all(albumPromises);
+//   });
+// };
+
+// const createAlbum = (knex, album, artist) => {
+//   console.log("album", album)
+//   console.log("artist", artist)
+//   return knex('artists').where('artistName', artist).first()
+//   .then((artistAlbums) => {
+//     return knex('albumsData').insert({
+//       idArtist: album.idArtist,
+//       albumName: album.albumName,
+//       yearReleased: album.yearReleased,
+//       albumArtist: album.albumArtist,
+//       albumGenre: album.albumGenre,
+//       artist_id: artistAlbums.idArtist
+//     });
+//   });
+// };
+
+
+const artistsData = require('../../../artistsData');
+const albumsData = require('../../../albumsData');
+
+const createArtist = (knex, artist) => {
+  return knex('artists').insert({
+    idArtist: artist.idArtist,
+    artistName: artist.artistName,
+    artistGenre: artist.artistGenre,
+    website: artist.artistGenre,
+    biography: artist.biography
+  }, 'idArtist')
+  .then(idArtist => {
+    let albumsPromise = [];
+    albumsData.filter(album => album.idArtist === idArtist[0])
+      .forEach(album => {
+      let albumInfo = {
+        idArtist: album.idArtist,
+        albumName: album.albumName,
+        yearReleased: album.yearReleased,
+        albumArtist: album.albumArtist,
+        albumGenre: album.albumGenre
+      }
+      albumsPromise.push(albumInfo)
+    })
+    return Promise.all(albumsPromise)
+  });
+};
+
+const createAlbum = (knex, album) => {
+  return knex('albums').insert(album)
+};
+
+
+exports.seed = function(knex) {
+  return knex('albums').del()
+  .then(() => knex('artists').del())
+  .then(() => {
+    let artistPromises = [];
+    artistsData.forEach(artist => {
+      artistPromises.push(createArtist(knex, artist));
+    });
+    return Promise.all(artistPromises);
+  })
+  .then(() =>  console.log('Seeding complete!'))
+  .catch(error => console.log(`Error seeding data: ${error}`));
+
+};
