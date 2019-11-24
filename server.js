@@ -30,6 +30,17 @@ app.get('/api/v1/artists', (request, response) => {
   });
 });
 
+app.get('/api/v1/albums', (request, response) => {
+  database('albums')
+  .select()
+  .then(albums => {
+    response.status(200).json(albums)
+  })
+  .catch(error => {
+    response.status(500).json({ error });
+  });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on http://localhost:${app.get('port')}.`);
 });
