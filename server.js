@@ -79,6 +79,44 @@ app.get('/api/v1/albums/:albumName', (request, response) => {
   });
 });
 
+app.get('/api/v1/albums/artist/:artistName', (request, response) => {
+  const { artistName } = request.params;
+  database('albums')
+  .where({ album_artist : artistName })
+  .then(album => {
+    if(album.length === 0) {
+      response.status(404)
+      .json({error: ` Sorry could not find an albums related to ${artistName} . Please check your query and try again. If album information does not exist in our database, please feel free to make a contribution.` })
+    }
+    response.status(200).json(album)
+  })
+
+  .catch(error => {
+    response.status(500).json({ error });
+  });
+});
+
+app.post('/api/v1/artists', (request, response) => {
+  const newArtist = request.body;
+
+  for (let requiredParameter of ['idArtist', 'artistName', 'artistGenre', 'website', 'biography']) {
+    if (!newArtist[requiredParameter]) {
+      return response.status(422).json({
+        error: `Expected format: { idArtist: <String>, artistName: <String>, artistGenre: <String>, website: <String>, biography: <String>. You are missing "${requiredParameter}" property.`
+      });
+    }
+  }
+
+  database('artists').insert(newArtist, 'id')
+    .then(artist => {
+      response.status(201).json({ id: artist[0] })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
+
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on http://localhost:${app.get('port')}.`);
 });
