@@ -2,7 +2,11 @@
 
 This API is intended for music enthusiast. Find artists and their albums. If you cannot find information on artists or albums, feel free to make a contribution to help us share information about music with the world.
 
-## API Endpoints
+## [Sprint Project Board](https://github.com/dawnlunacy/byob/projects/1)
+
+## [Deployed On Heroku]()
+
+### API Endpoints
 
 <table>
   <thead>
