@@ -141,7 +141,6 @@ app.delete('/api/v1/artists/:artistName', (request, response) => {
 
   database('artists')
     .where({ artist_name : artistToDelete })
-    .select()
     .del()
     .then(artist => {
       if (artist.length === 0) {
