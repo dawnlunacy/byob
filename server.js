@@ -99,7 +99,7 @@ app.get('/api/v1/albums/artist/:artistName', (request, response) => {
 app.post('/api/v1/artists', (request, response) => {
   const newArtist = request.body;
 
-  for (let requiredParameter of ['idArtist', 'artistName', 'artistGenre', 'website', 'biography']) {
+  for (let requiredParameter of ['artistName', 'artistGenre', 'website', 'biography']) {
     if (!newArtist[requiredParameter]) {
       return response.status(422).json({
         error: `Expected format: { idArtist: <String>, artistName: <String>, artistGenre: <String>, website: <String>, biography: <String>. You are missing "${requiredParameter}" property.`
@@ -116,6 +116,49 @@ app.post('/api/v1/artists', (request, response) => {
     })
 })
 
+app.post('/api/v1/albums', (request, response) => {
+  const newAlbum = request.body;
+
+  for (let requiredParameter of ['idArtist', 'albumName', 'yearReleased', 'albumArtist', 'albumGenre']) {
+    if (!newAlbum[requiredParameter]) {
+      return response.status(422).json({
+        error: `Expected format: { idArtist: <String>, albumName: <String>, yearReleased: <Integer>, albumArtist: <String>, albumGenre: <String>. You are missing "${requiredParameter}" property.`
+      });
+    }
+  }
+
+  database('albums').insert(newAlbum, 'id')
+    .then(album => {
+      response.status(201).json({ id: album[0] });
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    })
+})
+
+app.delete('/api/v1/artists/:artistName', (request, response) => {
+  const artistToDelete = request.params;
+
+  database('artists')
+    .where({ artist_name : artistToDelete })
+    .select()
+    .del()
+    .then(artist => {
+      if (artist.length === 0) {
+        return response.status(404).json({error: `Could not find ${artistToDelete.artistName} in database, unable to delete. `})
+      }
+    })
+
+  database('albums')
+      .where({ album_artist: artistToDelete})
+      .del()
+      .then(() => {
+        response.status(200).json({ message: `Successfully deleted ${artistToDelete.artistName} and their albums` })
+      })
+      .catch(error => {
+        response.status(500).json({ error });
+      })
+});
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on http://localhost:${app.get('port')}.`);
